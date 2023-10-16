@@ -5,6 +5,7 @@ AA='XX'
 a='XX'
 BB='XX'
 CC='XX'
+DD='XX'
 
 while true; do 
 
@@ -33,7 +34,7 @@ while true; do
 
 	'se')
 		read -p "Introdueix un estat: " resposta2
-	        AA=$(awk -F',' -v estat="$resposta2" '$5 == estat {print $4}' cities.csv | sort | uniq)
+	        AA=$(awk -F',' -v estat="$resposta2" -v pais="$resposta" '$5 == estat && $8 == pais {print $4}' cities.csv | sort | uniq)
 		#a= $(awk -F',' -v estat="$resposta2" '$8 == estat {print $7}' cities.csv | sort | uniq)
 		if [ -n "$AA" ]; then #&& [ "$a" == "$YY" ]; then
 	                echo $AA
@@ -51,7 +52,7 @@ while true; do
 
 	'lcp')
 		CC=$(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq)
-                echo $CC
+                echo "$CC"
                 ;;
 	
 	'ecp')
@@ -59,8 +60,12 @@ while true; do
 		(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq) >> $YY.csv 		
 		;;
 	'lce')
-		DD=$(awk -F',' -v n="$AA" '$5 == n {print $2, $11}' cities.csv | sort | uniq)
+
+		DD=$(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq)
                 echo "$DD"
+		;;
+	'lce')
+		(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq) > "${YY}_${AA}.csv"
 		;;
 	esac
 
