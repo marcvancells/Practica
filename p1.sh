@@ -19,7 +19,7 @@ while true; do
         	;;
 
     	'lp')
-		cut -d',' -f7,8 cities.csv | uniq
+		cut -d',' -f7,8 cities.csv | sort | uniq
         	;;
 	
 	'sc')
@@ -72,13 +72,36 @@ while true; do
 		EE=$(awk -F',' -v z="$YY" -v e="$AA" -v poblacio="$resposta3" '$2 == poblacio && $7 == z && $4 == e {print $11}' cities.csv | sort | uniq)
 		if [ -n "$EE" ]; then
 			echo "$EE"
-			curl -o $EE.json https://www.wikidata.org/wiki/Special:EntityData/$EE.json > $EE.json
+			curl -L $EE.json https://www.wikidata.org/wiki/Special:EntityData/$EE.json > $EE.json
 		else
 			echo "Població Incorrecta"
 		fi
 		;;
-		
 
-	esac
+	'est') 
+		awk -F',' '{
+			if ($9 > 0){
+				nord++
+			} else if ($9 < 0) {
+				sud++
+			}
+			if ($10 > 0) {
+				est++
+			} else if ($10 < 0) {
+				oest++
+			}
+			if ($9 == 0 && $10 == 0){
+				no_ubi++
+			}
+			if ($11 == ""){
+				nowdld++
+			}
+		}
+		END {
+			print "Nord",nord,"Sud",sud,"Est",est,"Oest",oest,"No ubic",no_ubi,"No WDld",nowdld
+		}' cities.csv
+		;;	
+
+esac
 
 done
