@@ -6,6 +6,7 @@ a='XX'
 BB='XX'
 CC='XX'
 DD='XX'
+EE='XX'
 
 while true; do 
 
@@ -34,9 +35,8 @@ while true; do
 
 	'se')
 		read -p "Introdueix un estat: " resposta2
-	        AA=$(awk -F',' -v estat="$resposta2" -v pais="$resposta" '$5 == estat && $8 == pais {print $4}' cities.csv | sort | uniq)
-		#a= $(awk -F',' -v estat="$resposta2" '$8 == estat {print $7}' cities.csv | sort | uniq)
-		if [ -n "$AA" ]; then #&& [ "$a" == "$YY" ]; then
+	        AA=$(awk -F',' -v estat="$resposta2" -v z="$YY" '$5 == estat && $7 == z {print $4}' cities.csv | sort | uniq)
+		if [ -n "$AA" ]; then
 	                echo $AA
 	        else
         	        AA="XX"
@@ -62,11 +62,23 @@ while true; do
 	'lce')
 
 		DD=$(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq)
-                echo "$DD"
+                ec<F10>ho "$DD"
 		;;
-	'lce')
+	'ece')
 		(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq) > "${YY}_${AA}.csv"
 		;;
+	'gwd')
+		read -p "Introdueix el nom de la població: " resposta3
+		EE=$(awk -F',' -v z="$YY" -v e="$AA" -v poblacio="$resposta3" '$2 == poblacio && $7 == z && $4 == e {print $11}' cities.csv | sort | uniq)
+		if [ -n "$EE" ]; then
+			echo "$EE"
+			curl -o $EE.json https://www.wikidata.org/wiki/Special:EntityData/$EE.json > $EE.json
+		else
+			echo "Població Incorrecta"
+		fi
+		;;
+		
+
 	esac
 
 done
