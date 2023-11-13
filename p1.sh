@@ -2,8 +2,6 @@
 
 YY='XX'
 AA='XX'
-a='XX'
-BB='XX'
 CC='XX'
 DD='XX'
 EE='XX'
@@ -38,7 +36,7 @@ while true; do
 	        AA=$(awk -F',' -v estat="$resposta2" -v z="$YY" '$5 == estat && $7 == z {print $4}' cities.csv | sort | uniq)
 		if [ -n "$AA" ]; then
 	                echo $AA
-	        else
+	      	else
         	        AA="XX"
                 	echo $AA
         	fi
@@ -46,23 +44,18 @@ while true; do
 
 
 	'le')
-		BB=$(awk -F',' -v z="$YY" '$7 == z {print $4, $5}' cities.csv | sort | uniq)
-		echo "$BB"
+		echo "$(awk -F',' -v z="$YY" '$7 == z {print $4, $5}' cities.csv | sort | uniq)"
 		;;
 
 	'lcp')
-		CC=$(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq)
-                echo "$CC"
+                echo "$(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq)"
                 ;;
 	
-	'ecp')
-		touch $YY.csv	
-		(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq) >> $YY.csv 		
+	'ecp')	
+		(awk -F',' -v z="$YY" '$7 == z {print $2, $11}' cities.csv | sort | uniq) > $YY.csv 		
 		;;
 	'lce')
-
-		DD=$(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq)
-                ec<F10>ho "$DD"
+                echo "$(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq)"
 		;;
 	'ece')
 		(awk -F',' -v e="$AA" -v z="$YY" '$4 == e && $7 == z {print $2, $11}' cities.csv | sort | uniq) > "${YY}_${AA}.csv"
